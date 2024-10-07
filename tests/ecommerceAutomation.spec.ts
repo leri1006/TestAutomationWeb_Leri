@@ -15,11 +15,10 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
 
   //Navigate to Ibox's homepage
   const websiteUrl = 'https://www.ibox.co.id/';
-  const navigateUrl = await page.goto(websiteUrl, { timeout: 50000 });
+  const navigateUrl = await page.goto(websiteUrl, { timeout: 5000 });
   console.log('Succesfully open the website www.ibox.co.id');
 
  //Search product 
-  await page.waitForSelector('[data-testid="qa-searchfield"]', { timeout: 5000 });
   await page.getByTestId('qa-searchfield').click();
   await page.getByTestId('qa-searchfield').fill(productName);
   await page.getByTestId('qa-searchfield').press('Enter');
@@ -66,7 +65,7 @@ test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => 
 
   //Navigate to Tokopedia's homepage
   const tokpedWebsiteUrl = 'https://www.tokopedia.com/';
-  const navigateUrl = await page.goto(tokpedWebsiteUrl, { timeout: 50000 });
+  const navigateUrl = await page.goto(tokpedWebsiteUrl, { timeout: 5000 });
   console.log('Succesfully open the website www.tokopedia.com');
 
   //Search product 
