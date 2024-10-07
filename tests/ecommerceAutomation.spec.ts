@@ -1,5 +1,14 @@
 import { test, expect } from '@playwright/test';
 
+interface Product {
+  website: string;
+  name: string;
+  price: string;
+  url: string | null; 
+}
+
+const products: Product[] = []; //array for products
+
 test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
   //Define the product you want to search for
   const productName = 'iPhone 15 Pro';
@@ -10,6 +19,7 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
   console.log('Succesfully open the website www.ibox.co.id');
 
  //Search product 
+  await page.waitForSelector('[data-testid="qa-searchfield"]', { timeout: 5000 });
   await page.getByTestId('qa-searchfield').click();
   await page.getByTestId('qa-searchfield').fill(productName);
   await page.getByTestId('qa-searchfield').press('Enter');
@@ -40,10 +50,13 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
       return metaTag ? metaTag.getAttribute('content') : null;
   });
 
-  console.log(`Website: ${websiteUrl}`);
+  products.push({ website: websiteUrl, name: productTitleText, price: productPriceText, url: metaContentUrl });
+
+
+  /* console.log(`Website: ${websiteUrl}`);
   console.log(`Product Name: ${productTitleText}`);
   console.log(`Product Price: ${productPriceText}`);
-  console.log(`URL Product: ${metaContentUrl}`); 
+  console.log(`URL Product: ${metaContentUrl}`); */
 
 });
 
@@ -85,9 +98,31 @@ test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => 
       return metaTag ? metaTag.getAttribute('content') : null;
   });
 
-  console.log(`Website: ${tokpedWebsiteUrl}`);
+  products.push({ website: tokpedWebsiteUrl, name: tokpedProductName, price: tokpedProductPrice, url: tokpedmetaContentUrl });
+
+
+  /*console.log(`Website: ${tokpedWebsiteUrl}`);
   console.log(`Product Name: ${tokpedProductName}`);
   console.log(`Product Price: ${tokpedProductPrice}`);
-  console.log(`URL Product: ${tokpedmetaContentUrl}`); 
+  console.log(`URL Product: ${tokpedmetaContentUrl}`); */
 
+});
+
+test('Combine and Sort Products by Price', async () => {
+  //Function to parse price and convert it to a number for comparison
+  const parsePrice = (price) => {
+      return parseFloat(price.replace(/[^0-9.-]+/g,"")); // Remove currency symbols and parse as float
+  };
+
+  //Sort the products array based on product price
+  const sortedProducts = products.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+
+  //Log the sorted product details
+  console.log('Sorted Products by Price:');
+  sortedProducts.forEach(product => {
+      console.log(`Website: ${product.website}`);
+      console.log(`Product Name: ${product.name}`);
+      console.log(`Product Price: ${product.price}`);
+      console.log(`URL Product: ${product.url}`);
+  });
 });
