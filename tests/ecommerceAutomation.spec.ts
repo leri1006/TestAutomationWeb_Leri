@@ -7,7 +7,7 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
   //Navigate to Ibox's homepage
   const websiteUrl = 'https://www.ibox.co.id/';
   const navigateUrl = await page.goto(websiteUrl);
-  console.log('Succesfully open the website.');
+  console.log('Succesfully open the website www.ibox.co.id');
 
  //Search product 
   await page.getByTestId('qa-searchfield').click();
@@ -15,7 +15,7 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
   await page.getByTestId('qa-searchfield').press('Enter');
   console.log(`Successfully Entered ${productName} for Product Search.`);
 
-  //Validate the result is shown for the mentioned product.
+  //Validate the result is shown for the mentioned product
   await page.getByRole('heading', { name: 'Hasil pencarian' });
   await page.getByText('iPhone 15 Pro');
   console.log('Search is successfully loaded.');
@@ -26,7 +26,7 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
   const productText = await productDetails.innerText();
   console.log(`Product Details of ${productText} are shown.`);
 
-  //Getting Product Title
+  //Getting Product Name
   const productTitleElement = page.getByRole('heading', { name: 'iPhone 15 Pro', exact: true }).first();
   const productTitleText = await productTitleElement.innerText();
 
@@ -44,5 +44,50 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
   console.log(`Product Name: ${productTitleText}`);
   console.log(`Product Price: ${productPriceText}`);
   console.log(`URL Product: ${metaContentUrl}`); 
+
+});
+
+test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => {
+  //Define the product you want to search for
+  const productName = 'iPhone 15 Pro';
+
+  //Navigate to Tokopedia's homepage
+  const tokpedWebsiteUrl = 'https://www.tokopedia.com/';
+  const navigateUrl = await page.goto(tokpedWebsiteUrl);
+  console.log('Succesfully open the website www.tokopedia.com');
+
+  //Search product 
+  await page.getByPlaceholder('Cari di Tokopedia').click();
+  await page.getByPlaceholder('Cari di Tokopedia').fill(productName);
+  await page.getByPlaceholder('Cari di Tokopedia').press('Enter');
+  console.log(`Successfully Entered ${productName} for Product Search.`);
+
+  //Validate the result is shown for the mentioned product
+  await page.getByText(`Menampilkan 1 - 60 barang ${productName}`);
+  console.log('Search is successfully loaded.');
+
+  //Click one of the product result
+  const tokpedProductDetails = await page.getByRole('link', { name: 'product-image Apple iPhone 15 Pro Garansi Resmi - 128GB 256GB 512GB 1T -' });
+  await tokpedProductDetails.click();
+  console.log(`Product Details are shown.`);
+
+  //Getting Product Name
+  const tokpedProductNameElement = page.getByTestId('lblPDPDetailProductName').first();
+  const tokpedProductName = await tokpedProductNameElement.innerText();
+  
+  //Getting Product Price
+  const tokpedProductPriceElement = page.getByTestId('lblPDPDetailProductPrice').first();
+  const tokpedProductPrice = await tokpedProductPriceElement.innerText();
+
+  //Getting Product URL
+  const tokpedmetaContentUrl = await page.evaluate(() => {
+      const metaTag = document.querySelector('meta[property="og:url"]');
+      return metaTag ? metaTag.getAttribute('content') : null;
+  });
+
+  console.log(`Website: ${tokpedWebsiteUrl}`);
+  console.log(`Product Name: ${tokpedProductName}`);
+  console.log(`Product Price: ${tokpedProductPrice}`);
+  console.log(`URL Product: ${tokpedmetaContentUrl}`); 
 
 });
