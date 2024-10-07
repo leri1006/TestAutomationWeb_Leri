@@ -15,7 +15,7 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
 
   //Navigate to Ibox's homepage
   const websiteUrl = 'https://www.ibox.co.id/';
-  const navigateUrl = await page.goto(websiteUrl);
+  const navigateUrl = await page.goto(websiteUrl, { timeout: 50000 });
   console.log('Succesfully open the website www.ibox.co.id');
 
  //Search product 
@@ -66,7 +66,7 @@ test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => 
 
   //Navigate to Tokopedia's homepage
   const tokpedWebsiteUrl = 'https://www.tokopedia.com/';
-  const navigateUrl = await page.goto(tokpedWebsiteUrl);
+  const navigateUrl = await page.goto(tokpedWebsiteUrl, { timeout: 50000 });
   console.log('Succesfully open the website www.tokopedia.com');
 
   //Search product 
@@ -79,9 +79,9 @@ test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => 
   await page.getByText(`Menampilkan 1 - 60 barang ${productName}`);
   console.log('Search is successfully loaded.');
 
+ 
   //Click one of the product result
-  const tokpedProductDetails = await page.getByRole('link', { name: 'product-image Apple iPhone 15 Pro Garansi Resmi - 128GB 256GB 512GB 1T -' });
-  await tokpedProductDetails.click();
+  const tokpedProductDetails = await page.getByTestId('CPMProductItem').first().click();
   console.log(`Product Details are shown.`);
 
   //Getting Product Name
