@@ -19,7 +19,6 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
   console.log('Succesfully open the website www.ibox.co.id');
 
  //Search product 
-  await page.getByTestId('qa-searchfield').click();
   await page.getByTestId('qa-searchfield').fill(productName);
   await page.getByTestId('qa-searchfield').press('Enter');
   console.log(`Successfully Entered ${productName} for Product Search.`);
@@ -51,12 +50,6 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
 
   products.push({ website: websiteUrl, name: productTitleText, price: productPriceText, url: metaContentUrl });
 
-
-  /* console.log(`Website: ${websiteUrl}`);
-  console.log(`Product Name: ${productTitleText}`);
-  console.log(`Product Price: ${productPriceText}`);
-  console.log(`URL Product: ${metaContentUrl}`); */
-
 });
 
 test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => {
@@ -69,7 +62,6 @@ test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => 
   console.log('Succesfully open the website www.tokopedia.com');
 
   //Search product 
-  await page.getByPlaceholder('Cari di Tokopedia').click();
   await page.getByPlaceholder('Cari di Tokopedia').fill(productName);
   await page.getByPlaceholder('Cari di Tokopedia').press('Enter');
   console.log(`Successfully Entered ${productName} for Product Search.`);
@@ -98,12 +90,6 @@ test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => 
   });
 
   products.push({ website: tokpedWebsiteUrl, name: tokpedProductName, price: tokpedProductPrice, url: tokpedmetaContentUrl });
-
-
-  /*console.log(`Website: ${tokpedWebsiteUrl}`);
-  console.log(`Product Name: ${tokpedProductName}`);
-  console.log(`Product Price: ${tokpedProductPrice}`);
-  console.log(`URL Product: ${tokpedmetaContentUrl}`); */
 
 });
 
