@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { load } from 'cheerio';
+//import { load } from 'cheerio';
 
 interface Product {
   website: string;
@@ -57,6 +57,45 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
   await page.getByText('iPhone 15 Pro');
   console.log('Search is successfully loaded.');
 
+  //Getting every product information
+  await page.waitForSelector('.w-full.grid.xxxs\\:grid-cols-1.sm\\:grid-cols-2.md\\:grid-cols-3.lg\\:grid-cols-4');
+  const innerTexts = await page.$$eval('.w-full.grid.xxxs\\:grid-cols-1.sm\\:grid-cols-2.md\\:grid-cols-3.lg\\:grid-cols-4 > *', elements => 
+      elements.map(element => {
+          const productNameandPrice = (element as HTMLElement).innerText; 
+          const linkElement = element.querySelector('a'); 
+          const href = linkElement ? linkElement.href : null; 
+
+          const lines = productNameandPrice.split('\n').map(line => line.trim()).filter(line => line !== '');
+      
+          let nameofProduct = "";
+          let priceofProduct = "";
+
+          if (lines.length > 0) {
+              nameofProduct = lines[0]; // First line is the product name
+             // console.log(`${nameofProduct}`);
+          }
+  
+          if (lines.length > 2) {
+              priceofProduct = lines[2]; // Third line is the actual price
+              //console.log(`${priceofProduct}`);
+          }
+
+          return { nameofProduct, priceofProduct, href };
+      })
+  );
+
+  innerTexts.forEach(element => {
+      if (element.nameofProduct && element.priceofProduct) {
+          products.push({
+              website: "Ibox",
+              name: element.nameofProduct,
+              price: element.priceofProduct,
+              url: element.href
+          });
+      }
+  });
+
+  /*
   //Click one of the product result
   const productDetails = await page.locator('.xxxs\\:w-full > .inline-flex').first();
   await productDetails.click();
@@ -78,6 +117,7 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
 
   products.push({ website: 'Ibox', name: productTitleText, price: productPriceText, url: metaContentUrl });
 
+  */
 });
 
 test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => {
@@ -121,6 +161,39 @@ test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => 
   await page.getByText(`Menampilkan 1 - 60 barang ${productName}`);
   console.log('Search is successfully loaded.');
 
+  //Gettting every product information
+  await page.waitForSelector('div[data-testid="divSRPContentProducts"] div.css-jza1fo div.css-5wh65g');
+  const divs = await page.$$eval('div[data-testid="divSRPContentProducts"] div.css-jza1fo div.css-5wh65g', divs =>
+      divs.map(div => {
+          const productNames = (div as HTMLElement).innerText; 
+          const linkElement = div.querySelector('a'); 
+          const href = linkElement ? linkElement.href : null; 
+      
+          return { name: productNames, href };
+      })
+  );
+
+  divs.forEach(text => {
+    const lines = text.name.split('\n').map(line => line.trim()).filter(line => line !== '');
+
+    const productNames = lines.find(line => line.includes('iPhone'));
+    const priceLine = lines.find(line => line.startsWith('Rp'));
+
+    //If a product name is found and the price line exists
+    if (productNames && priceLine) {
+        
+        const newProduct: Product = {
+            website: 'Tokopedia',
+            name: productNames,
+            price: priceLine,
+            url: text.href || null 
+        };
+        
+        products.push(newProduct);
+    }
+    });
+
+  /*
   const tokpedGridElement = page.getByTestId('divSRPContentProducts');
 
   const tokpedGridInnerText = await tokpedGridElement.innerText();
@@ -164,7 +237,7 @@ test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => 
           //discountPercentage: discountPercentage,
           url: href
       });
-  }
+  } */
 
 });
 
