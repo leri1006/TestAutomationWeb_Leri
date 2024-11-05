@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-//import { load } from 'cheerio';
 
 interface Product {
   website: string;
@@ -72,12 +71,10 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
 
           if (lines.length > 0) {
               nameofProduct = lines[0]; // First line is the product name
-             // console.log(`${nameofProduct}`);
           }
   
           if (lines.length > 2) {
               priceofProduct = lines[2]; // Third line is the actual price
-              //console.log(`${priceofProduct}`);
           }
 
           return { nameofProduct, priceofProduct, href };
@@ -95,29 +92,6 @@ test('Search and Validate Result for Ibox E-commerce', async ({ page }) => {
       }
   });
 
-  /*
-  //Click one of the product result
-  const productDetails = await page.locator('.xxxs\\:w-full > .inline-flex').first();
-  await productDetails.click();
-  console.log(`Product Details are shown.`);
-
-  //Getting Product Name
-  const productTitleElement = page.getByRole('heading', { name: 'iPhone 15 Pro', exact: true }).first();
-  const productTitleText = await productTitleElement.innerText();
-
-  //Getting Product Price
-  const productPriceElement = page.getByTestId('qa-pdp-price').first();
-  const productPriceText = await productPriceElement.innerText();
-
-  //Getting Product URL
-  const metaContentUrl = await page.evaluate(() => {
-      const metaTag = document.querySelector('meta[property="og:url"]');
-      return metaTag ? metaTag.getAttribute('content') : null;
-  });
-
-  products.push({ website: 'Ibox', name: productTitleText, price: productPriceText, url: metaContentUrl });
-
-  */
 });
 
 test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => {
@@ -193,52 +167,7 @@ test('Search and Validate Result for Tokopedia E-commerce', async ({ page }) => 
     }
     });
 
-  /*
-  const tokpedGridElement = page.getByTestId('divSRPContentProducts');
-
-  const tokpedGridInnerText = await tokpedGridElement.innerText();
-  const tokpedGridHTML = await tokpedGridElement.innerHTML();
-
-  const $ = load(tokpedGridHTML);
-
-  const hrefs: string[] = [];
-    $('a').each((_, element) => {
-        const href = $(element).attr('href');
-        if (href) {
-            hrefs.push(href);
-        }
-    });
-    const top4Hrefs = hrefs.slice(0, 4);
-
-    const lines = tokpedGridInnerText.trim().split('\n').map(line => line.trim());
-
-    for (let i = 0; i < lines.length && i < 8 * 4; i += 8) {//Not every product has 8 lines, there is limitation on the innerText
-      const discountPercentage = lines[i] || 'N/A';
-      const productName = lines[i + 1] || 'N/A';
-      const originalPrice = lines[i + 2] || 'N/A';
-      const discountedPrice = lines[i + 3] || 'N/A';
-      const rating = lines[i + 4] || 'N/A';
-      const sold = lines[i + 5] || 'N/A';
-      const seller = lines[i + 6] || 'N/A';
-      const location = lines[i + 7] || 'N/A';
-
-      const href = top4Hrefs[Math.floor(i / 8)] || null; 
-
-      //Push product details into the products array
-      products.push({
-          website: 'Tokopedia',
-          name: productName,
-          price: originalPrice,
-          //discountedPrice: discountedPrice,
-          //rating: rating,
-          //sold: sold,
-          //seller: seller,
-          //location: location,
-          //discountPercentage: discountPercentage,
-          url: href
-      });
-  } */
-
+  
 });
 
 test('Combine and Sort Products by Price', async () => {
